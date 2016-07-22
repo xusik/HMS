@@ -5,6 +5,11 @@ Home Meteo Station
   - nrf24l01  connected via hardware SPI
   - BMP085    connected via software I2C
   - DHT11     connected via 1wire
+  
+Resources used:
+  - https://github.com/rei-vilo/I2C_Software_Library
+  - https://github.com/spirilis/Enrf24
+  
 
 ```sh
                   +-\/-+
