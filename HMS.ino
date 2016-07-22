@@ -11,13 +11,6 @@
 // 	   	         4  CSN P2.1  9|    |12  P2.4 SCL
 //		         8  IRQ P2.2 10|    |11  P2.3 SDA
 // 			               +----+
-//
-//
-
-
-
-
-
 
 #include "Energia.h"
 #include <Enrf24.h>
