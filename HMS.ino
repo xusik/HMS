@@ -83,7 +83,7 @@ void loop(void)
   
   radio.flush();
     
-  radio.print("sn/r1{\"t\":\"" + TempH + "." + TempL + "\"}");
+  radio.print((char*) "sn/r1{\"t\":\"" + TempH + "." + TempL + "\"}".c_str());
   radio.flush();
 
   sleepSeconds(2);
