@@ -35,7 +35,7 @@ const uint8_t txaddr[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0x01 };
 
 const char *str_on = "ON";
 const char *str_off = "OFF";
-String Pres, TempL, TempH;
+int Pres, TempL, TempH;
 
 unsigned char pin = P2_5;
 
@@ -46,10 +46,6 @@ BMP085<0> PSensor;         // instantiate sensor, 0 = low precision pressure rea
 void setup(void) {
     
     Serial.begin(9600);
-    Serial.println("*** START");
-    
-    Serial.print("I2C begin... ");
-    
     Wire.begin();
     
     PSensor.begin();         // initalize pressure sensor    
@@ -66,29 +62,22 @@ void loop(void)
   int16_t rawtemperature, rawhumidity;
   if (dht::readRawData(pin, &rawtemperature, &rawhumidity,false) == 0)
   {    
-      Serial.print("(raw) T: ");
-      Serial.print(rawtemperature);
-      Serial.print(" H: ");
-      Serial.print(rawhumidity); 
-      
   }  
   
   delay (1000);
   PSensor.refresh();                    // read current sensor data
   delay (1000);
   PSensor.calculate();                  // run calculations for temperature and pressure
-  TempH  = String(PSensor.temperature/10);
-  TempL = String(PSensor.temperature%10);
-  Pres = String((PSensor.pressure+50)/100);
+  TempH  = PSensor.temperature/10;
+  TempL = PSensor.temperature%10;
+  Pres = PSensor.pressure+50)/100;
   
-  radio.flush();
+  Serial.println("sn/r1{\"t\":\"" + TempH + "." + TempL + "\"}");
     
-  radio.print((char*) "sn/r1{\"t\":\"" + TempH + "." + TempL + "\"}".c_str());
+  radio.print("sn/r1{\"t\":\"" + TempH + "." + TempL + "\"}");
   radio.flush();
 
-  sleepSeconds(2);
-  
-  radio.print("sn/r1{\"h\":\"" + String(rawhumidity) + "\"}");
+  radio.print("sn/r1{\"h\":\"" + rawhumidity + "\"}");
   radio.flush();
     
   sleepSeconds(2);
