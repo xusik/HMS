@@ -81,6 +81,8 @@ void loop(void)
   TempL = String(PSensor.temperature%10);
   Pres = String((PSensor.pressure+50)/100);
   
+  radio.flush();
+    
   radio.print("sn/r1{\"t\":\"" + TempH + "." + TempL + "\"}");
   radio.flush();
 
@@ -91,7 +93,7 @@ void loop(void)
     
   sleepSeconds(2);
     
-  radio.print("sn/r1{\"p\":\"" + Pres + "\"}")
+  radio.print("sn/r1{\"p\":\"" + Pres + "\"}");
   radio.flush();
     
   sleepSeconds(300);
