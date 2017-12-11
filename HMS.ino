@@ -82,7 +82,7 @@ void loop(void)
   Pres = String((PSensor.pressure+50)/100);
 
                         // wait a while before next loop
-//  Serial.println("Sending packet: ");
+/*  Serial.println("Sending packet: ");
   Serial.println(Pres);
   radio.print("P"+Pres);
   radio.flush();
@@ -95,7 +95,7 @@ void loop(void)
 //  Serial.print("Sending packet: ");
   Serial.println(TempH + "."+ TempL);
   radio.print("T"+TempH + "."+ TempL);
-  radio.flush();
+  radio.flush(); */
 
   radio.print("sn/r1{\"t\":\""+ TempH + "." + TempL +"\",\"h\":\"" + String(rawhumidity) + "\",\"p\":\"" + Pres +  "\"}");
   radio.flush();
