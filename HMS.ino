@@ -96,7 +96,10 @@ void loop(void)
   Serial.println(TempH + "."+ TempL);
   radio.print("T"+TempH + "."+ TempL);
   radio.flush();
-  
+
+  radio.print("sn/r1{\"t\":\""+ TempH + "." + TempL +"\",\"h\":\"" + String(rawhumidity) + "\",\"p\":\"" + Pres +  "\"}");
+  radio.flush();
+    
   sleepSeconds(300);
 }
 
