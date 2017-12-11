@@ -15,10 +15,9 @@
 #include "Energia.h"
 #include <Enrf24.h>
 #include <nRF24L01.h>
-#include <string.h>
 #include <SPI.h>
 #include "I2C_SoftwareLibrary.h"
-#include <dht.h>
+//#include <dht.h>
 
 
 #define SCL_PIN P2_4 ///< pin for SCL
@@ -33,19 +32,15 @@ SoftwareWire Wire(SDA_PIN, SCL_PIN); ///< Instantiate SoftwareWire
 Enrf24 radio(P2_0, P2_1, P2_2);  // P2.0=CE, P2.1=CSN, P2.2=IRQ
 const uint8_t txaddr[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0x01 };
 
-const char *str_on = "ON";
-const char *str_off = "OFF";
-int Pres, TempL, TempH;
+int16_t Pres, TempL, TempH;
 
 unsigned char pin = P2_5;
-
-void dump_radio_status_to_serialport(uint8_t);
 
 BMP085<0> PSensor;         // instantiate sensor, 0 = low precision pressure reading
 
 void setup(void) {
     
-    Serial.begin(9600);
+//    Serial.begin(9600);
     Wire.begin();
     
     PSensor.begin();         // initalize pressure sensor    
@@ -59,32 +54,22 @@ void setup(void) {
 }
 void loop(void)
 {
-  int16_t rawtemperature, rawhumidity;
-  if (dht::readRawData(pin, &rawtemperature, &rawhumidity,false) == 0)
-  {    
-  }  
-  
-  delay (1000);
+
   PSensor.refresh();                    // read current sensor data
   delay (1000);
   PSensor.calculate();                  // run calculations for temperature and pressure
-  TempH  = PSensor.temperature/10;
+  TempH  =  PSensor.temperature/10;
   TempL = PSensor.temperature%10;
-  Pres = PSensor.pressure+50)/100;
-  
-  Serial.println("sn/r1{\"t\":\"" + TempH + "." + TempL + "\"}");
-    
-  radio.print("sn/r1{\"t\":\"" + TempH + "." + TempL + "\"}");
+  Pres =  (PSensor.pressure+50)/100;
+
+//  Serial.println(String("sn/r1{\"t\":\"") + TempH + String(".") + TempL + "\"}");
+  radio.print(String("sn/r1{\"t\":\"") + TempH + String(".") + TempL + "\"}");
   radio.flush();
 
-  radio.print("sn/r1{\"h\":\"" + rawhumidity + "\"}");
+//  Serial.println(String("sn/r1{\"p\":\"") + Pres + "\"}");  
+  radio.print(String("sn/r1{\"p\":\"") + Pres + "\"}");
   radio.flush();
-    
-  sleepSeconds(2);
-    
-  radio.print("sn/r1{\"p\":\"" + Pres + "\"}");
-  radio.flush();
-    
+//    
   sleepSeconds(300);
 }
 
